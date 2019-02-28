@@ -318,7 +318,7 @@ nuget pack foo.nuspec -Version 2.1.0</value>
     <value>Pushes a package to the server and publishes it.</value>
   </data>
   <data name="PushCommandSourceDescription" xml:space="preserve">
-    <value>Specifies the server URL. If not specified, nuget.org is used unless DefaultPushSource config value is set in the NuGet config file.</value>
+    <value>Specifies the server URL. NuGet identifies a UNC or local folder source and simply copies the file there instead of pushing it using HTTP. Also, starting with NuGet 3.4.2, this is a mandatory parameter unless the NuGet.Config file specifies a DefaultPushSource value.</value>
     <comment>Please don't localize "DefaultPushSource"</comment>
   </data>
   <data name="PushCommandSymbolSourceDescription" xml:space="preserve">

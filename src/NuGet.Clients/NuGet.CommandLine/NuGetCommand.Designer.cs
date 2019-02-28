@@ -8988,7 +8988,7 @@ namespace NuGet.CommandLine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specifies the server URL. If not specified, nuget.org is used unless DefaultPushSource config value is set in the NuGet config file..
+        ///   Looks up a localized string similar to Specifies the server URL. NuGet identifies a UNC or local folder source and simply copies the file there instead of pushing it using HTTP. Also, starting with NuGet 3.4.2, this is a mandatory parameter unless the NuGet.Config file specifies a DefaultPushSource value..
         /// </summary>
         internal static string PushCommandSourceDescription {
             get {
