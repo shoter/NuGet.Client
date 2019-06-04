@@ -465,6 +465,16 @@ namespace NuGet.Commands
                 targetFramework,
                 item => item.TargetFramework);
 
+            // FrameworkReducer.GetNearest does not consider ATF since it is used for more than just compat
+            if (dependencyGroup == null && targetFramework is AssetTargetFallbackFramework)
+            {
+                var atfFramework = targetFramework as AssetTargetFallbackFramework;
+                dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
+                    atfFramework,
+                    item => item.TargetFramework);
+                // TODO NK - The problem with this approach is obvious. We can't guarantee the same target framework will be selected by regular assets selection
+            }
+
             if (dependencyGroup != null)
             {
                 return dependencyGroup.Packages.Select(PackagingUtility.GetLibraryDependencyFromNuspec).ToArray();
