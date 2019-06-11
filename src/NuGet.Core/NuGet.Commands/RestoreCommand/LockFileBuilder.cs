@@ -196,7 +196,7 @@ namespace NuGet.Commands
                             // Do not include the project itself as a library.
                             continue;
                         }
-
+                        //graphItem.Data.Dependencies
                         var projectLib = LockFileUtils.CreateLockFileTargetProject(
                             graphItem,
                             library,
