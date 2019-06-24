@@ -472,7 +472,6 @@ namespace NuGet.Commands
                 dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
                     atfFramework.AsFallbackFramework(),
                     item => item.TargetFramework);
-                // TODO NK - The problem with this approach is obvious. We can't guarantee the same target framework will be selected by regular assets selection
             }
 
             if (dependencyGroup != null)
