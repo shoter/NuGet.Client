@@ -362,8 +362,26 @@ namespace NuGet.Commands
                     packageInfo.PackageIdentity.Version,
                     match.Type);
 
-                var dependencies = GetDependencies(packageInfo, targetFramework);
+                var dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
+                    targetFramework,
+                    item => item.TargetFramework);
 
+                bool ATFUsedWhenSelectingDependencies = false;
+                // FrameworkReducer.GetNearest does not consider ATF since it is used for more than just compat
+                if (dependencyGroup == null && targetFramework is AssetTargetFallbackFramework)
+                {
+                    var atfFramework = targetFramework as AssetTargetFallbackFramework;
+                    dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
+                        atfFramework.AsFallbackFramework(),
+                        item => item.TargetFramework);
+                    ATFUsedWhenSelectingDependencies = dependencyGroup != null;
+                }
+
+                var dependencies = dependencyGroup != null ?
+                     dependencyGroup.Packages.Select(PackagingUtility.GetLibraryDependencyFromNuspec).ToArray() :
+                     Enumerable.Empty<LibraryDependency>();
+
+                // TODO NK - Provide the library dependency info information here and propagate it!
                 return LibraryDependencyInfo.Create(originalIdentity, targetFramework, dependencies);
             }
         }
@@ -450,36 +468,6 @@ namespace NuGet.Commands
             }
 
             return null;
-        }
-
-        private IEnumerable<LibraryDependency> GetDependencies(
-            FindPackageByIdDependencyInfo packageInfo,
-            NuGetFramework targetFramework)
-        {
-            if (packageInfo == null)
-            {
-                return Enumerable.Empty<LibraryDependency>();
-            }
-
-            var dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
-                targetFramework,
-                item => item.TargetFramework);
-
-            // FrameworkReducer.GetNearest does not consider ATF since it is used for more than just compat
-            if (dependencyGroup == null && targetFramework is AssetTargetFallbackFramework)
-            {
-                var atfFramework = targetFramework as AssetTargetFallbackFramework;
-                dependencyGroup = NuGetFrameworkUtility.GetNearest(packageInfo.DependencyGroups,
-                    atfFramework.AsFallbackFramework(),
-                    item => item.TargetFramework);
-            }
-
-            if (dependencyGroup != null)
-            {
-                return dependencyGroup.Packages.Select(PackagingUtility.GetLibraryDependencyFromNuspec).ToArray();
-            }
-
-            return Enumerable.Empty<LibraryDependency>();
         }
 
         private async Task EnsureResource()
