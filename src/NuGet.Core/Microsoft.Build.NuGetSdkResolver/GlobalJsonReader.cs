@@ -1,13 +1,11 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using Microsoft.Build.Shared;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using System.Text.Json.Serialization;
 using Microsoft.Build.Framework;
 
 namespace Microsoft.Build.NuGetSdkResolver
@@ -63,12 +61,13 @@ namespace Microsoft.Build.NuGetSdkResolver
         /// </summary>
         private static Dictionary<string, string> Deserialize(string value)
         {
-            return JsonConvert.DeserializeObject<GlobalJsonFile>(value).MSBuildSdks;
+            var globalJson = JsonSerializer.Parse<GlobalJsonFile>(value);
+            return globalJson.MSBuildSdks;
         }
 
         private sealed class GlobalJsonFile
         {
-            [JsonProperty(MSBuildSdksPropertyName)]
+            [JsonPropertyName(MSBuildSdksPropertyName)]
             public Dictionary<string, string> MSBuildSdks { get; set; }
         }
 

@@ -43,6 +43,7 @@
     <MoqVersion>4.10.1</MoqVersion>
     <FluentAssertionsVersion>4.19.4</FluentAssertionsVersion>
     <MicrosoftBuildPackageVersion Condition="$(MicrosoftBuildPackageVersion) == ''">16.0.461</MicrosoftBuildPackageVersion>
+    <SystemTextJsonPackageVersion>4.6.0-preview6.19303.8</SystemTextJsonPackageVersion>
   </PropertyGroup>
 
   <!-- Config -->
