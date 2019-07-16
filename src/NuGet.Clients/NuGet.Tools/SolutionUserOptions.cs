@@ -122,7 +122,11 @@ namespace NuGetVSExtension
             {
                 using (var stream = new DataStreamFromComStream(pOptionsStream))
                 {
-                    NuGetSettings settings = _serializer.Deserialize(stream);
+                    NuGetSettings settings = NuGetUIThreadHelper.JoinableTaskFactory.Run(async () =>
+                    {
+                        var result = await _serializer.DeserializeAsync(stream);
+                        return result;
+                    });
 
                     if (settings != null)
                     {
@@ -154,7 +158,7 @@ namespace NuGetVSExtension
             {
                 using (var stream = new DataStreamFromComStream(pOptionsStream))
                 {
-                    _serializer.Serialize(stream, _settings);
+                    NuGetUIThreadHelper.JoinableTaskFactory.Run(() => _serializer.SerializeAsync(stream, _settings));
                 }
             }
             catch
