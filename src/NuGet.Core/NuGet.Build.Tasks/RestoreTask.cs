@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Build.Framework;
-using Newtonsoft.Json;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
