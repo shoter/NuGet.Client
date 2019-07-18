@@ -193,8 +193,14 @@ else
         ToolsetTargetBranches = $ToolsetTargetBranches.Trim()
     }
 
-    New-Item $BuildInfoJsonFile -Force
-    $jsonRepresentation | ConvertTo-Json | Set-Content $BuildInfoJsonFile
+    $localBuildInfoJsonFilePath = [System.IO.Path]::Combine("$Env:BUILD_REPOSITORY_LOCALPATH\artifacts", 'buildinfo.json')
+
+    New-Item $localBuildInfoJsonFilePath -Force
+    $jsonRepresentation | ConvertTo-Json | Set-Content $localBuildInfoJsonFilePath
+
+    [System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($BuildInfoJsonFile))
+    [System.IO.File]::Copy($localBuildInfoJsonFilePath, $BuildInfoJsonFile)
+
     $productVersion = & $msbuildExe $env:BUILD_REPOSITORY_LOCALPATH\build\config.props /v:m /nologo /t:GetSemanticVersion
     if (-not $?)
     {
