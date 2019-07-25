@@ -95,24 +95,9 @@ namespace NuGet.Commands
         LocalPackageFileCache fileCache,
         bool isFallbackFolderSource)
         {
-            if (sourceRepository == null)
-            {
-                throw new ArgumentNullException(nameof(sourceRepository));
-            }
-
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
-
-            if (cacheContext == null)
-            {
-                throw new ArgumentNullException(nameof(cacheContext));
-            }
-
-            _sourceRepository = sourceRepository;
-            _logger = logger;
-            _cacheContext = cacheContext;
+            _sourceRepository = sourceRepository ?? throw new ArgumentNullException(nameof(sourceRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _cacheContext = cacheContext ?? throw new ArgumentNullException(nameof(cacheContext));
             _ignoreFailedSources = ignoreFailedSources;
             _ignoreWarning = ignoreWarning;
             _packageFileCache = fileCache;
@@ -367,6 +352,7 @@ namespace NuGet.Commands
                     item => item.TargetFramework);
 
                 bool ATFUsedWhenSelectingDependencies = false;
+                // TODO NK - We might need to consider the fact that any framework might be the result here, and check for ATF even if it is.
                 // FrameworkReducer.GetNearest does not consider ATF since it is used for more than just compat
                 if (dependencyGroup == null && targetFramework is AssetTargetFallbackFramework)
                 {
