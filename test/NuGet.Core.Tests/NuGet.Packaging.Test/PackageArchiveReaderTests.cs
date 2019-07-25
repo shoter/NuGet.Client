@@ -734,7 +734,7 @@ namespace NuGet.Packaging.Test
                     var exception = Assert.Throws<PackagingException>(() => reader.GetNuspec());
 
                     // Assert
-                    Assert.Matches("^The global package folder copy of package .* is missing one or more files.$",exception.Message);
+                    Assert.Matches("^The global package folder is missing one or more files. Delete package folder and run the restore again: .*$", exception.Message);
                 }
             }
         }
@@ -780,7 +780,7 @@ namespace NuGet.Packaging.Test
                     var exception = Assert.Throws<PackagingException>(() => reader.GetNuspec());
 
                     // Assert
-                    Assert.Matches("^The global package folder copy of package .* is missing one or more files.$", exception.Message);
+                    Assert.Matches("^The global package folder is missing one or more files. Delete package folder and run the restore again: .*$", exception.Message);
                 }
             }
         }
@@ -807,7 +807,7 @@ namespace NuGet.Packaging.Test
                     var exception = Assert.Throws<PackagingException>(() => reader.GetNuspec());
 
                     // Assert
-                    Assert.Matches("^The global package folder copy of package .* is missing one or more files.$", exception.Message);
+                    Assert.Matches("^The global package folder is missing one or more files. Delete package folder and run the restore again: .*$", exception.Message);
                 }
             }
         }
