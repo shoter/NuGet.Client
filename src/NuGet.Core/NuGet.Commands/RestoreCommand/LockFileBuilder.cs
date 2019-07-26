@@ -40,7 +40,7 @@ namespace NuGet.Commands
             PackageSpec project,
             IEnumerable<RestoreTargetGraph> targetGraphs,
             IReadOnlyList<NuGetv3LocalRepository> localRepositories,
-            RemoteWalkContext context)
+            RemoteWalkContext _)
         {
             var lockFile = new LockFile()
             {
@@ -243,7 +243,7 @@ namespace NuGet.Commands
                                 dependencies: graphItem.Data.Dependencies,
                                 cache: builderCache);
 
-                            if (!targetLibrary.Equals(targetLibraryWithoutFallback))
+                            if (!targetLibrary.Equals(targetLibraryWithoutFallback) || graphItem.Data.UsedATFForDependencies)
                             {
                                 var libraryName = DiagnosticUtility.FormatIdentity(library);
 

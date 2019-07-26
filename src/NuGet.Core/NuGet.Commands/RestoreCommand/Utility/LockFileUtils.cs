@@ -75,7 +75,6 @@ namespace NuGet.Commands
                 };
 
                 // Populate assets
-
                 if (lockFileLib.PackageType.Contains(PackageType.DotnetTool))
                 {
                     AddToolsAssets(library, package, targetGraph, dependencyType, lockFileLib, framework, runtimeIdentifier, contentItems, nuspec, orderedCriteriaSets[i]);
