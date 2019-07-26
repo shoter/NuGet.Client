@@ -10,8 +10,6 @@ namespace NuGet.DependencyResolver
     {
         public RemoteMatch Match { get; set; }
         public IEnumerable<LibraryDependency> Dependencies { get; set; }
-        // We can add the info here if ATF was used to resolve the dependencies. Is this even worth worrying about?
-        // check how the dependency selection works when there is not target framework denomination.
-    // does any apply to .net core as well?
+        public bool UsedATFForDependencies { get; set; }
     }
 }

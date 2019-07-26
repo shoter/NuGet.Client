@@ -403,7 +403,7 @@ namespace NuGet.Protocol
                     return await _httpSource.GetAsync(
                         new HttpSourceCachedRequest(
                             uri,
-                            $"list_{ }",
+                            $"list_{packageIdLowerCase}",
                             httpSourceCacheContext)
                         {
                             IgnoreNotFounds = true,

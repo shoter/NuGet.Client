@@ -368,7 +368,7 @@ namespace NuGet.Commands
                      Enumerable.Empty<LibraryDependency>();
 
                 // TODO NK - Provide the library dependency info information here and propagate it!
-                return LibraryDependencyInfo.Create(originalIdentity, targetFramework, dependencies);
+                return LibraryDependencyInfo.Create(originalIdentity, targetFramework, dependencies, ATFUsedWhenSelectingDependencies);
             }
         }
 

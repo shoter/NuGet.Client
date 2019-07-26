@@ -898,10 +898,10 @@ namespace NuGet.DependencyResolver.Tests
                 List<LibraryDependency> dependencies;
                 if (_graph.TryGetValue(match, out dependencies))
                 {
-                    return Task.FromResult(LibraryDependencyInfo.Create(match, targetFramework, dependencies));
+                    return Task.FromResult(LibraryDependencyInfo.Create(match, targetFramework, dependencies, false));
                 }
 
-                return Task.FromResult(LibraryDependencyInfo.Create(match, targetFramework, Enumerable.Empty<LibraryDependency>()));
+                return Task.FromResult(LibraryDependencyInfo.Create(match, targetFramework, Enumerable.Empty<LibraryDependency>(), false));
             }
 
             public bool SupportsType(LibraryDependencyTarget libraryType)
