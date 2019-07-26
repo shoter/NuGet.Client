@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -307,7 +307,12 @@ namespace NuGet.Frameworks
         /// </summary>
         public bool IsUnsupported
         {
-            get { return UnsupportedFramework.Equals(this); }
+            // Poposal 1: the comment above says "true if this framework is invalid or unknown". This makes that happen
+            get
+            {
+                string _;
+                return DefaultFrameworkNameProvider.Instance.TryGetShortIdentifier(_frameworkIdentifier, out _);
+            }
         }
 
         /// <summary>

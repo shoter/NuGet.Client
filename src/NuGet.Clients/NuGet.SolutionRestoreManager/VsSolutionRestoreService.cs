@@ -13,6 +13,7 @@ using Microsoft;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
+using NuGet.Frameworks;
 using NuGet.ProjectModel;
 using NuGet.Shared;
 using NuGet.VisualStudio;
@@ -129,8 +130,9 @@ namespace NuGet.SolutionRestoreManager
 
                 return restoreTask;
             }
+            // Proposal 4: don't let the exception propogate. No assets file is being generated anyway.
             catch (Exception e)
-            when (e is InvalidOperationException || e is ArgumentException || e is FormatException)
+            when (e is InvalidOperationException || e is ArgumentException || e is FormatException || e is FrameworkException)
             {
                 _logger.LogError(e.ToString());
                 return Task.FromResult(false);
@@ -177,7 +179,20 @@ namespace NuGet.SolutionRestoreManager
             
             // Initialize OTF and CT values when original value of OTF property is not provided.
             var originalTargetFrameworks = tfis
-                .Select(tfi => tfi.FrameworkName.GetShortFolderName())
+                .Select(tfi =>
+                {
+                    // Proposal 3: in 15.x, the project system nominates the Unsupported framework, but since 16.x it nominates
+                    // a framework named "_". This way we just ignore all NuGetFramework API design flaws, and just make
+                    // nomination work like it used to
+                    try
+                    {
+                        return tfi.FrameworkName.GetShortFolderName();
+                    }
+                    catch
+                    {
+                        return NuGetFramework.UnsupportedFramework.GetShortFolderName();
+                    }
+                })
                 .ToArray();
             var crossTargeting = originalTargetFrameworks.Length > 1;
 

@@ -95,7 +95,8 @@ namespace NuGet.Frameworks
                 string platform = null;
                 if (!mappings.TryGetIdentifier(parts[0], out platform))
                 {
-                    platform = parts[0];
+                    // Proposal 2: NuGetFramework.Parse("_") returns UnsupportedFramework, so NuGetFramework.Parse("_,Version=2.0") should too
+                    return UnsupportedFramework;
                 }
 
                 var version = new Version(0, 0);
