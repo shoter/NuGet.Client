@@ -62,7 +62,7 @@ namespace NuGet.Commands
         /// is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="logger" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="cacheContext" /> is <c>null</c>.</exception>
-        public SourceRepositoryDependencyProvider(
+        internal SourceRepositoryDependencyProvider(
             SourceRepository sourceRepository,
             ILogger logger,
             SourceCacheContext cacheContext,

@@ -35,8 +35,7 @@ namespace NuGet.Commands
         public LockFile CreateLockFile(LockFile previousLockFile,
             PackageSpec project,
             IEnumerable<RestoreTargetGraph> targetGraphs,
-            IReadOnlyList<NuGetv3LocalRepository> localRepositories,
-            RemoteWalkContext _)
+            IReadOnlyList<NuGetv3LocalRepository> localRepositories)
         {
             var lockFile = new LockFile()
             {

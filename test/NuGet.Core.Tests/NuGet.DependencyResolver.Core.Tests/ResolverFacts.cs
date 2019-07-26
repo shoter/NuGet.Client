@@ -52,7 +52,8 @@ namespace NuGet.DependencyResolver.Core.Tests
             NuGetFramework.Parse("net45"),
             runtimeIdentifier: null,
             runtimeGraph: null,
-            recursive: true);
+            recursive: true,
+            CancellationToken.None);
 
             Assert.NotNull(result.Item.Data.Match);
             Assert.NotNull(result.Item.Data.Match.Library);
@@ -92,7 +93,8 @@ namespace NuGet.DependencyResolver.Core.Tests
             NuGetFramework.Parse("net45"),
             runtimeIdentifier: null,
             runtimeGraph: null,
-            recursive: true);
+            recursive: true,
+            CancellationToken.None);
 
             Assert.NotNull(result.Item.Data.Match);
             Assert.NotNull(result.Item.Data.Match.Library);
