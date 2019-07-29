@@ -130,7 +130,7 @@
     Build, Pack, Core Tests, Unit tests for VS
     ============================================================
   -->
-  <Target Name="RunVS"  DependsOnTargets="BuildVS;Pack;CoreUnitTests;UnitTestsVS">
+  <Target Name="RunVS" DependsOnTargets="BuildVS;Pack;CoreUnitTests;UnitTestsVS">
     <Message Text="Running NuGet Build for VS $(VisualStudioVersion)" Importance="high" />
   </Target>
 
@@ -354,20 +354,27 @@
     <MakeDir Directories="$(TestResultsDirectory)" />
 
     <PropertyGroup>
+      <TestResultOutputFormat Condition="'$(TestResultOutputFormat)' == ''">xml</TestResultOutputFormat>
+      <TestResultsXunit Condition=" '$(TestResultsFileName)' != '' ">$(TestResultsDirectory)\$(TestResultsFileName)-xunit.$(TestResultOutputFormat)</TestResultsXunit>
+      <TestResultsVsts Condition=" '$(TestResultsFileName)' != '' ">$(TestResultsDirectory)\$(TestResultsFileName)-vsts.$(TestResultOutputFormat)</TestResultsVsts>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(RunIsDesktop)' == 'true' ">
       <!-- Sort assemblies -->
       <DesktopInputTestAssemblies>@(TestAssemblyPath->WithMetadataValue("IsDesktop", "true"))</DesktopInputTestAssemblies>
       <DesktopInputTestAssembliesSpaced>$(DesktopInputTestAssemblies.Replace(';', ' '))</DesktopInputTestAssembliesSpaced>
-      <CoreInputTestAssemblies>@(TestAssemblyPath->WithMetadataValue("IsCore", "true"))</CoreInputTestAssemblies>
-      <CoreInputTestAssembliesSpaced>$(CoreInputTestAssemblies.Replace(';', ' '))</CoreInputTestAssembliesSpaced>
       
-      <TestResultOutputFormat Condition="'$(TestResultOutputFormat)' == ''">xml</TestResultOutputFormat>
       <!-- Build exe commands -->
-      <TestResultsXunit Condition=" '$(TestResultsFileName)' != '' ">$(TestResultsDirectory)\$(TestResultsFileName)-xunit.$(TestResultOutputFormat)</TestResultsXunit>
-      <TestResultsVsts Condition=" '$(TestResultsFileName)' != '' ">$(TestResultsDirectory)\$(TestResultsFileName)-vsts.$(TestResultOutputFormat)</TestResultsVsts>
-      <VsTestLogger>--TestAdapterPath:$(XunitXmlLoggerDirectory) --logger:xunit;LogFileName=$(TestResultsFileName)-vsts.$(TestResultOutputFormat)</VsTestLogger>
-      <VSTestCommand>$(DotnetExePath) vstest $(CoreInputTestAssembliesSpaced) $(VsTestLogger)</VSTestCommand>
       <DesktopTestCommand>$(XunitConsoleExePath) $(DesktopInputTestAssembliesSpaced)</DesktopTestCommand>
       <DesktopTestCommand Condition=" '$(TestResultsXunit)' != '' ">$(DesktopTestCommand) -$(TestResultOutputFormat) $(TestResultsXunit) $(Verbosity)</DesktopTestCommand>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(RunIsCore)' == 'true' ">
+      <CoreInputTestAssemblies>@(TestAssemblyPath->WithMetadataValue("IsCore", "true"))</CoreInputTestAssemblies>
+      <CoreInputTestAssembliesSpaced>$(CoreInputTestAssemblies.Replace(';', ' '))</CoreInputTestAssembliesSpaced>
+
+      <VsTestLogger>--TestAdapterPath:$(XunitXmlLoggerDirectory) --logger:xunit;LogFileName=$(TestResultsFileName)-vsts.$(TestResultOutputFormat)</VsTestLogger>      
+      <VSTestCommand>$(DotnetExePath) vstest $(CoreInputTestAssembliesSpaced) $(VsTestLogger)</VSTestCommand>
     </PropertyGroup>
 
     <!-- Desktop -->
